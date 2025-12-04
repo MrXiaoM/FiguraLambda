@@ -1,6 +1,7 @@
 {
   "required": true,
   "package": "org.figuramc.figura.mixin.neoforge",
+  "refmap": "figura-lambda-refmap.json",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "client": [
