@@ -22,32 +22,32 @@ public abstract class CommandSuggestionsMixinNeoForge {
 
     @Shadow public abstract void showSuggestions(boolean narrateFirstSuggestion);
 
-    @Unique private boolean emojiSuggestions;
+    @Unique private boolean figuraLambda$emojiSuggestions;
 
-    @Inject(method = "updateCommandInfo", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/SharedSuggestionProvider;suggest(Ljava/lang/Iterable;Lcom/mojang/brigadier/suggestion/SuggestionsBuilder;)Ljava/util/concurrent/CompletableFuture;"), locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void addFiguraSuggestions(CallbackInfo ci, String string, StringReader stringReader, boolean bl2, boolean bl3, int i, String string2, int j, Collection<String> collection) {
-        emojiSuggestions = false;
+    @Inject(method = "updateCommandInfo", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/SharedSuggestionProvider;suggest(Ljava/lang/Iterable;Lcom/mojang/brigadier/suggestion/SuggestionsBuilder;)Ljava/util/concurrent/CompletableFuture;"), locals = LocalCapture.CAPTURE_FAILSOFT, expect = 0)
+    private void addFiguraSuggestions(CallbackInfo ci, String string, StringReader stringReader, boolean bl2, int i, String string2, int j, Collection collection) {
+        figuraLambda$emojiSuggestions = false;
         if (Configs.EMOJIS.value == 0)
             return;
 
         String lastWord = string2.substring(j);
         Collection<String> emojis = Emojis.getMatchingEmojis(lastWord);
-        emojiSuggestions = !emojis.isEmpty();
-        if (emojiSuggestions)
+        figuraLambda$emojiSuggestions = !emojis.isEmpty();
+        if (figuraLambda$emojiSuggestions)
             collection.addAll(emojis);
     }
 
     @Inject(method = "updateCommandInfo", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/commands/SharedSuggestionProvider;suggest(Ljava/lang/Iterable;Lcom/mojang/brigadier/suggestion/SuggestionsBuilder;)Ljava/util/concurrent/CompletableFuture;", shift = At.Shift.AFTER))
     private void afterSuggesting(CallbackInfo ci) {
-        if (emojiSuggestions && Configs.EMOJIS.value >= 2)
+        if (figuraLambda$emojiSuggestions && Configs.EMOJIS.value >= 2)
             this.showSuggestions(false);
     }
 
     @Inject(method = "showSuggestions", at = @At("RETURN"))
     private void showSuggestions(CallbackInfo ci) {
-        if (emojiSuggestions && this.suggestions != null) {
+        if (figuraLambda$emojiSuggestions && this.suggestions != null) {
             ((SuggestionsListAccessor) this.suggestions).figura$setFiguraList(true);
-            emojiSuggestions = false;
+            figuraLambda$emojiSuggestions = false;
         }
     }
 }
